@@ -1,0 +1,2 @@
+conda init powershell
+conda activate tool-tracking_env
