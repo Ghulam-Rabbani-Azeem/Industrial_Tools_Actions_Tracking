@@ -72,4 +72,23 @@ def remove_windows_by_indices(Xt, Xc, y, indices_to_remove):
      
     indices_to_remove = set(indices_to_remove)
     mask = [i not in indices_to_remove for i in range(len(Xt))]
-    return np.array(Xt)[mask], np.array(Xc)[mask], np.array(y)[mask]
+    
+    #  return np.array(Xt)[mask], np.array(Xc)[mask], np.array(y)[mask]
+
+    Xt_filtered = np.array(Xt)[mask]
+    Xc_filtered = np.array(Xc)[mask]
+    y_filtered = [y[i] for i in range(len(y)) if mask[i]]
+
+    try:
+        # Try converting to 2D array directly (only works if all same length)
+        y_array = np.array(y)[mask]
+    except ValueError:
+        # Fallback: pad to make 2D array
+        max_len = max(len(yi) for yi in y_filtered)
+        y_array = np.full((len(y_filtered), max_len), fill_value=-42, dtype=int)
+        for i, yi in enumerate(y_filtered):
+            y_array[i, :len(yi)] = yi
+
+    print("[INFO] Xt shape:", Xt_filtered.shape)
+    print("[INFO] y shape after processing:", y_array.shape)
+    return Xt_filtered, Xc_filtered, y_array
