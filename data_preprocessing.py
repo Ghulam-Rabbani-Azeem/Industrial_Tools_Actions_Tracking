@@ -1,5 +1,5 @@
 import numpy as np
-
+import pandas as pd
 
 def find_ambiguous_windows(Xt, Xc, y, name):
     """
@@ -92,3 +92,31 @@ def remove_windows_by_indices(Xt, Xc, y, indices_to_remove):
     print("[INFO] Xt shape:", Xt_filtered.shape)
     print("[INFO] y shape after processing:", y_array.shape)
     return Xt_filtered, Xc_filtered, y_array
+
+def load_combined_data(data_path='ES_InterDown_combined_data.csv', labels_path='ES_InterDown_combined_labels.csv'):
+    """
+    Load combined data and labels from CSV files.
+    Parameters:
+    ----------
+    data_path : str
+        Path to the CSV file containing the combined data.
+    labels_path : str
+        Path to the CSV file containing the labels.
+    Returns:
+    -------
+    data : np.ndarray
+        Combined data array with shape (num_windows, 41, 11).
+    labels : np.ndarray                
+        Labels array with shape (num_windows,).
+    """
+    # Load data and labels from CSV files
+    if not data_path.endswith('.csv') or not labels_path.endswith('.csv'):
+        raise ValueError("Both data_path and labels_path must be CSV files.")
+    if not (data_path and labels_path):
+        raise ValueError("Both data_path and labels_path must be provided.")
+    data = pd.read_csv(data_path).values
+    labels = pd.read_csv(labels_path)['label'].values
+    num_windows = labels.shape[0]
+    data = data.reshape(num_windows, 41, 11)
+    return data, labels
+

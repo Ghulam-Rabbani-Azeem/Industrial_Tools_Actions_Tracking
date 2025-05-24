@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def filter_labels(labels, Xt, Xc, y,name):
+def filter_labels(labels, Xt, Xc, y):
     # get labels per window
     y_labels = np.empty([len(y)])
     for i in range(len(y)):
